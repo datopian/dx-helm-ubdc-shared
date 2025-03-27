@@ -1,0 +1,200 @@
+ckan:
+  auth:
+    enable: false
+  ckan:
+    replicaCount: 1
+    env:
+      UWSGI_HARAKIRI: "50"
+      CKAN___SCHEMING__PRESETS: ckanext.scheming:presets.json
+      CKAN___SCHEMING__DATASET_SCHEMAS: ckanext.scheming:ckan_dataset.yaml
+      CKANEXT__DCAT__ENABLE_CONTENT_NEGOTIATION: "True"
+      CKAN___LICENSES_GROUP_URL: ""
+      CKANEXT__REPO__SRCPATH: /srv/app/src
+      CKANEXT__S3FILESTORE__AWS_ACCESS_KEY_ID: <replace_here>
+      CKANEXT__S3FILESTORE__AWS_BUCKET_NAME: <replace_here>
+      CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY: <replace_here>
+      CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY_READONLY: <replace_here>
+      CKANEXT__S3FILESTORE__AWS_ACCESS_KEY_ID_READONLY: <replace_here>
+      CKANEXT__S3FILESTORE__HOST_NAME: <replace_here>
+      CKANEXT__S3FILESTORE__REGION_NAME: <replace_here>
+      CKANEXT__S3FILESTORE__SIGNED_URL_EXPIRY: "60"
+      CKANEXT__S3FILESTORE__SIGNATURE_VERSION: s3v4
+      CKAN___SCHEMING__DATASET_SCHEMAS: "ckanext.ubdc:dataset_schema.yaml"
+      CKAN___SCHEMING__PRESETS: "ckanext.scheming:presets.json ckanext.composite:presets.json"
+      CKAN___GOOGLEANALYTICS__MEASUREMENT_ID: <replace_here>
+      CKANEXT__SPATIAL__SEARCH_BACKEND: solr
+      CKANEXT__PAGES__ALLOW_HTML: "True"
+      CKANEXT__ISSUES__SEND_EMAIL_NOTIFICATIONS: "False"
+      CKANEXT__DOI__TEST_MODE: "False"
+      CKANEXT__DOI__PREFIX: <replace_here>
+      CKANEXT__DOI__ACCOUNT_NAME: <replace_here>
+      CKANEXT__DOI__ACCOUNT_PASSWORD: <replace_here>
+      CKANEXT__DOI__PUBLISHER: "University of Glasgow"
+      CKANEXT__UBDC__GTM_ID: <replace_here>
+      CKANEXT__UBDC__NEWSLETTER_LINK: "https://ubdc.ac.uk/subscribe"
+      CKANEXT__UBDC__CC__API_KEY: <replace_here>
+      CKANEXT__UBDC__ACCESS_REQUEST_EMAIL_NOTIFICATION_EMAIL_TO: <replace_here>
+      CKAN_INI: /srv/app/production.ini
+      CKAN_SITE_ID: ubdc-prod
+      CKAN_SITE_URL: https://data.ubdc.ac.uk
+      CKAN__AUTH__PUBLIC_USER_DETAILS: "False"
+      CKAN_HOMEPAGE_STYLE: "2"
+      CKAN_SMTP_MAIL_FROM: <replace_here>
+      CKAN_SMTP_PASSWORD: <replace_here>
+      CKAN_SMTP_SERVER: <replace_here>
+      CKAN_SMTP_USER: <replace_here>
+      CKAN_SOLR_PASSWORD: <replace_here>
+      CKAN_SOLR_URL: <replace_here>
+      CKAN_SOLR_USER: <replace_here>
+      CKAN_SQLALCHEMY_URL: <replace_here>
+      CKAN_SVC_PORT_80_TCP_PROTO: tcp
+      CKAN_SYSADMIN_EMAIL: <replace_here>
+      CKAN_SYSADMIN_NAME: <replace_here>
+      CKAN_SYSADMIN_PASSWORD: <replace_here>
+      CKAN__AUTH__ANON_CREATE_DATASET: "False"
+      CKAN__AUTH__CREATE_DATASET_IF_NOT_IN_ORGANIZATION: "True"
+      CKAN__AUTH__CREATE_UNOWNED_DATASET: "False"
+      CKAN__AUTH__CREATE_USER_VIA_API: "False"
+      CKAN__AUTH__ROLES_THAT_CASCADE_TO_SUB_GROUPS: admin
+      CKAN__AUTH__USER_CREATE_GROUPS: "True"
+      CKAN__AUTH__USER_CREATE_ORGANIZATIONS: "True"
+      CKAN__AUTH__USER_DELETE_GROUPS: "True"
+      CKAN__AUTH__USER_DELETE_ORGANIZATIONS: "True"
+      CKAN__CORS_ORIGIN_ALLOW_ALL: "True"
+      CKAN__CORS__ORIGIN_ALLOW_ALL: "True"
+      CKAN__DATAPUSHER__URL: <replace_here>
+      CKAN__DATASETS_PER_PAGE: "25"
+      CKAN__DATASTORE__READ_URL: <replace_here>
+      CKAN__DATASTORE__WRITE_URL: <replace_here>
+      CKAN_DATASTORE_READ_URL: <replace_here>
+      CKAN_DATASTORE_WRITE_URL: <replace_here>
+      CKAN__HARVEST__MQ__TYPE: redis
+      CKAN__REDIS__URL: <replace_here>
+      CKAN__LOCALE_DEFAULT: en
+      CKAN__RESOURCE_PROXY__MAX_FILE_SIZE: "100000000"
+      CKAN__SITE_TITLE: UBDC PRODUCTION
+      CKAN__STORAGE_PATH: /tmp
+      CKAN__VIEWS__DEFAULT_VIEWS: dataexplorer_view text_view image_view pdf_view geojson_view
+      CKAN___BEAKER__SESSION__KEY: ckan
+      CKAN___BEAKER__SESSION__SECRET: <replace_here>
+      CKAN___BEAKER__SESSION__TABLE_NAME: beaker_sessions
+      CKAN___BEAKER__SESSION__TYPE: database
+      CKAN___BEAKER__SESSION__URL: <replace_here>
+      CKAN___SENTRY__CONFIGURE_LOGGING: "False"
+      CKAN___SENTRY__LOG_LEVEL: ERROR
+      CKAN___GOOGlEANALYTICS__ACCOUNT: <replace_here>
+      CKAN___GOOGlEANALYTICS__ENABLE_USER_ID: "True"
+      CKAN___GOOGlEANALYTICS__TRACK_EVENTS: "True"
+      CKAN___GOOGLEANALYTICS__PROPERTY_ID: <replace_here>
+      CKAN___GOOGlEANALYTICS__ID: <replace_here>
+      CKAN__RECAPTCHA__PUBLICKEY: <replace_here>
+      CKAN__RECAPTCHA__PRIVATEKEY: <replace_here>
+      CKAN__CACHE_ENABLED: "True"
+      CKAN__CACHE_EXPIRES: "300"
+      CKAN__STATIC_MAX_AGE: "300"
+      CKANEXT__STATS__CACHE_TIME: "120"
+      CKANEXT__S3FILESTORE__SIGNED_URL_EXPIRY: "604800"
+      CKANEXT__S3FILESTORE__CACHE_EXPIRATION_TIME: "600"
+    hpa:
+      enable: true
+      minReplicas: 1
+      maxReplicas: 3
+      targetMemoryUtilizationPercentage: 75
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 3G
+      requests:
+        cpu: 650m
+        memory: 2G
+    image:
+      pullPolicy: Always
+      repository: <replace_here>
+      tag: {{SHORT_SHA}}
+    runInitContainers: false
+    service:
+      port: 80
+      type: ClusterIP
+  ckanmiddleware:
+    enable: false
+  dataSubscriptions:
+    enable: false
+  datapusher:
+    enable: false
+    env:
+      DATAPUSHER_MAX_CONTENT_LENGTH: "5368709120"
+      DATAPUSHER_SQLALCHEMY_DATABASE_URI: <replace_here>
+    resources:
+      limits:
+        cpu: 300m
+        memory: 1G
+      requests:
+        cpu: 200m
+        memory: 0.8G
+    hpa:
+      enable: true
+      minReplicas: 1
+      maxReplicas: 3
+      targetMemoryUtilizationPercentage: 80
+    image:
+      digest: sha256:8bcf42cd350d48f7f190288833b9b4ef4ac9253417a8474a6522f55b8971d8cc
+      pullPolicy: Always
+      repository: docker.io/viderum/datapusher
+    replicaCount: 1
+  frontend:
+    enable: false
+  general:
+    autoscaling:
+      enable: false
+    customResource: true
+    dockerconfigjson: <replace_here>
+    imagePullSecrets: ckan-sealed-registry
+    projectId: ubdc-prod
+    resources: {}
+    useProductionCerts: true
+  giftless:
+    enable: false
+  ingress:
+    limitConnections: 80
+    limitRps: 80
+    domain: <replace_internal_project_url_here>
+    enable: true
+    enableExternal: true
+    external:
+      enabled: true
+      hosts:
+      - host: data.ubdc.ac.uk
+        isExternal: true
+        paths:
+        - path: /(.*)
+          port: 80
+          service: ubdc-prod-ckan-svc
+      tls:
+      - hosts:
+        - data.ubdc.ac.uk
+        isExternal: true
+        secretName: data.ubdc.ac.uk
+    hosts:
+      - host: <replace_internal_project_url_here>
+        isExternal: false
+        paths:
+          - path: /(.*)
+            port: 80
+            service: ubdc-prod-ckan-svc
+    ingressNamespace: ingress-nginx
+    tls:
+      - hosts:
+          - <replace_internal_project_url_here>
+        secretName: <replace_internal_project_url_here>
+  postgresql:
+    enable: false
+  solr:
+    enable: false
+  xloader:
+    enable: false
+redis:
+  password: <replace_here>
+  architecture: standalone
+  master:
+    persistence:
+      size: 1G

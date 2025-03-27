@@ -1,0 +1,9 @@
+dependencies:
+- name: ckan
+  repository: https://raw.githubusercontent.com/datopian/dx-helm-ckan/master/charts/
+  version: v3.1.1
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.6.1
+digest: sha256:59e29dd1d5aa022425f95e1bc86c91d6bb36fdadde306fb11b10415a3d133f50
+generated: "2023-12-23T19:42:46.625895+06:00"

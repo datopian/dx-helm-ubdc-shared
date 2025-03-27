@@ -1,0 +1,27 @@
+timeout: 3600s
+
+steps:
+- id: Install Cypress Tests Dependencies
+  name: 'gcr.io/google-appengine/nodejs'
+  entrypoint: 'bash'
+  env:
+    - 'CYPRESS_CACHE_FOLDER=/workspace/.tmp/Cypress'
+  args:
+    - '-c'
+    - |-
+      git clone -b ckan-2.9 https://github.com/datopian/ckan-integration-tests.git
+      cp -r ckan-integration-tests/cypress ckan-integration-tests/package-lock.json integration_tests/
+      cd integration_tests
+      npm ci --force
+    
+- id: Run Cypress Tests
+  name: cypress/included:4.10.0
+  entrypoint: 'bash'
+  env:
+    - 'CYPRESS_CACHE_FOLDER=/workspace/.tmp/Cypress'
+  args:
+    - '-c'
+    - |-
+      cd integration_tests
+      npm run test:recorded
+

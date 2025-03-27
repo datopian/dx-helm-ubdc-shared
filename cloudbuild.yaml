@@ -1,0 +1,117 @@
+timeout: 3600s
+
+images:
+  - "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:latest"
+
+steps:
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: Templater
+    entrypoint: "bash"
+    env:
+      - "SHORT_SHA=$SHORT_SHA"
+    args:
+      - "-c"
+      - |-
+        curl https://raw.githubusercontent.com/datopian/devops-tools/master/scripts/templater.sh > /tmp/templater.sh
+        bash /tmp/templater.sh helm-templates/values.yaml.template > helm-templates/values.yaml
+  - name: "gcr.io/cloud-builders/docker"
+    id: Pull
+    waitFor:
+      - Templater
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:latest || exit 0"
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: Build
+    timeout: 1800s
+    env:
+      - "SHORT_SHA=$SHORT_SHA"
+    waitFor:
+      - Pull
+    args:
+      - "build"
+      - "--tag"
+      - "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:$SHORT_SHA"
+      - "--tag"
+      - "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:latest"
+      - "--cache-from"
+      - "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:latest"
+      - "ckan"
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: Push
+    env:
+      - "SHORT_SHA=$SHORT_SHA"
+    waitFor:
+      - Build
+    args:
+      - "push"
+      - "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:$SHORT_SHA"
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: Latest
+    waitFor:
+      - Build
+    args:
+      - "push"
+      - "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/$REPO_NAME:latest"
+
+  - name: "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/helm"
+    id: Validate
+    waitFor:
+      - Pull
+      - Latest
+    args:
+      - template
+      - helm-templates/
+    env:
+      - "CLOUDSDK_COMPUTE_ZONE=europe-west1"
+      - "CLOUDSDK_CONTAINER_CLUSTER=ckan-cloud-cluster"
+      - "TILLERLESS=true"
+
+  - name: "europe-west1-docker.pkg.dev/$PROJECT_ID/<replace_here>/helm"
+    id: Deploy
+    timeout: 1800s
+    waitFor:
+      - Validate
+    args:
+      - upgrade
+      - -i
+      - "${REPO_NAME}-release"
+      - "./helm-templates"
+      - -f
+      - ./helm-templates/values.yaml
+      - -n
+      - "${REPO_NAME}"
+      - --create-namespace
+      - --wait
+    env:
+      - "CLOUDSDK_COMPUTE_ZONE=europe-west1"
+      - "CLOUDSDK_CONTAINER_CLUSTER=ckan-cloud-cluster"
+      - "TILLERLESS=true"
+
+  - id: Install Cypress Tests Dependencies
+    name: "gcr.io/google-appengine/nodejs"
+    entrypoint: "bash"
+    env:
+      - "CYPRESS_CACHE_FOLDER=/workspace/.tmp/Cypress"
+    args:
+      - "-c"
+      - |-
+        git clone -b ckan-2.9-ubdc-prod https://github.com/datopian/ckan-integration-tests.git
+        cp -r ckan-integration-tests/cypress ckan-integration-tests/package-lock.json integration_tests/
+        cd integration_tests
+        npm ci --force
+
+  - id: Run Cypress Tests
+    name: cypress/included:4.10.0
+    entrypoint: "bash"
+    env:
+      - "CYPRESS_CACHE_FOLDER=/workspace/.tmp/Cypress"
+    args:
+      - "-c"
+      - |-
+        cd integration_tests
+        npm run test:recorded

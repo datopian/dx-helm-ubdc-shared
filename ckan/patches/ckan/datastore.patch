@@ -1,0 +1,12 @@
+diff --git a/ckanext/datastore/allowed_functions.txt b/ckanext/datastore/allowed_functions.txt
+index 6b449f508..20d17311b 100644
+--- a/ckanext/datastore/allowed_functions.txt
++++ b/ckanext/datastore/allowed_functions.txt
+@@ -178,6 +178,7 @@ ntile
+ num_nonnulls
+ num_nulls
+ numnode
++over
+ parse_ident
+ path
+ pclose

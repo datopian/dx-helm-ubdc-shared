@@ -1,0 +1,14 @@
+{
+    "projectId": "ebkki7",
+    "chromeWebSecurity": false,
+    "baseUrl": "https://data.ubdc.ac.uk/",
+    "pageLoadTimeout": 120000,
+    "env": {
+      "FRONTEND_URL": "",
+      "API_KEY": <replace_here>,
+      "CKAN_USERNAME": <replace_here>,
+      "CKAN_PASSWORD": <replace_here>,
+      "ORG_NAME_SUFFIX": "_organization_test",
+      "DATASET_NAME_SUFFIX": "_dataset_test"
+    }
+}
